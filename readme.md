@@ -1,7 +1,7 @@
 [Tileset Game Engine](iainvm.github.io/projects/TilesetGameEngine)
 ----------------------------------------------
 Current Goals:
-- [ ] Read Map Info from File 
+- [X] Read Map Info from File 
 - [ ] Render Map Info with given TileSet 
 - [ ] Create Camera to move around the Map 
 - [ ] Use multiple Map Layers 
