@@ -8,6 +8,8 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Vector;
 
+import org.lwjgl.opengl.GL11;
+
 public class Map implements Serializable{
 		//The environment which is drawn around the player
 		
@@ -15,12 +17,19 @@ public class Map implements Serializable{
 		private Vector<Integer> dims = new Vector<Integer>(3);
 		private Vector<Vector<Vector<Integer>>> matrix;
 		private static final long serialVersionUID = 2L;
+		private Tileset tileset;
 
 		public Map(){
 			this.name = "default";
 			this.dims.setSize(3);
 			this.setDims(1, 2, 2);
 			this.setNullMap();
+			this.setTile(0, 0, 0, 1);
+			this.setTile(0, 0, 1, 1);
+			this.setTile(0, 1, 0, 2);
+			this.setTile(0, 1, 1, 3);
+			
+			this.tileset = new Tileset();
 		}
 
 		public Map(String name){
@@ -30,9 +39,10 @@ public class Map implements Serializable{
 			try {
 				this.read();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
+			this.tileset = new Tileset(name);
 		}
 		
 		public Map(String name, int z, int y, int x){
@@ -40,6 +50,11 @@ public class Map implements Serializable{
 			this.dims.setSize(3);
 			this.setDims(z, y, x);
 			this.setNullMap();
+		}
+		
+		public void renderTileset(){
+	        GL11.glEnable(GL11.GL_TEXTURE_2D); 
+			this.tileset.renderAll();
 		}
 		
 		public void setNullMap(){
@@ -57,6 +72,15 @@ public class Map implements Serializable{
 				}
 			}
 		}
+
+		public void renderLayer(int k, Cam cam){
+	    	for(int j = 0; j < this.dims.get(1); j++){
+	    		for(int i = 0; i < this.dims.get(2); i++){
+	    	        GL11.glEnable(GL11.GL_TEXTURE_2D);
+			        this.tileset.renderTile(this.getTile(k, j, i), i, j, cam);
+	    		}
+	    	}
+		}
 		
 		public void setName(String name){
 			this.name = name;
@@ -66,16 +90,16 @@ public class Map implements Serializable{
 			return this.name;
 		}
 		
-		public void setDims(int z, int y, int x){
-			this.dims.set(0, z);
+		public void setDims(int layers, int y, int x){
+			this.dims.set(0, layers);
 			this.dims.set(1, y);
 			this.dims.set(2, x);
 		}
 		
 		public Vector<Integer> getDims(){
-			return (Vector<Integer>) this.dims;
+			return this.dims;
 		}
-		
+				
 		public void setTile(int z, int y, int x, int val){
 			this.matrix.get(z).get(y).set(x, val);
 		}
@@ -95,7 +119,6 @@ public class Map implements Serializable{
 			this.matrix = o.matrix;
 			ois.close();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 	    }
@@ -113,8 +136,8 @@ public class Map implements Serializable{
 				oos.writeObject(this);
 				oos.close();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+		
 	}

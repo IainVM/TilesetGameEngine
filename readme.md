@@ -2,8 +2,8 @@
 ----------------------------------------------
 Current Goals:
 - [X] Read Map Info from File 
-- [ ] Render Map Info with given TileSet 
-- [ ] Create Camera to move around the Map 
+- [X] Render Map Info with given TileSet 
+- [X] Create Camera to move around the Map 
 - [ ] Use multiple Map Layers 
 - [ ] Have movable tile to represent the player 
 - [ ] Have tiles that the player can’t pass through (implement collisions) 
