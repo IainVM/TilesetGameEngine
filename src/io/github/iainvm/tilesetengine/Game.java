@@ -17,6 +17,7 @@ public class Game{
 	public Game(){
 		//Just loads up the default map used for testing
 		this.map = new Map("test");
+		System.out.println('TEST');
 	}	
 	
 	public Game(String name){
